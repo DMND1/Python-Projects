@@ -15,7 +15,7 @@ orari_autobus_15_direzione_università =     (640,  750,  830,  855,  1240, 1320
 orari_autobus_19_direzione_terminal =       (831,  856,  1036, 1211, 1321, 1351, 1501, 1621, 1806, 1926)
 orari_autobus_19_direzione_università =     (655,  750,  815,  850,  955,  1130, 1230, 1300, 1350, 1420, 1540, 1725, 1845)
 
-# Dizionari per ogni autobus
+# Dizionari per ogni autobus, ad ogni direzione tra "terminal" e "università" è associata la relativa tupla
 autobus_1 =      {"terminal": orari_autobus_1_direzione_terminal,      "università": orari_autobus_1_direzione_università}
 autobus_2U_2UT = {"terminal": orari_autobus_2U_2UT_direzione_terminal, "università": orari_autobus_2U_2UT_direzione_università}
 autobus_3 =      {"terminal": orari_autobus_3_direzione_terminal,      "università": orari_autobus_3_direzione_università}
@@ -41,14 +41,22 @@ tutti_gli_autobus =  {
 print("Scegliere tra:" + "\n" + "1: per usare l'orario corrente" + "\n" + "2: per inserire l'orario di partenza desiderato")
 scelta = int(input("Scelta: "))
 
+# Se la scelta è 1
 if scelta == 1:
+    # Importo la libreria datetime
     from datetime import datetime
+    # Inizializzazione variabili
     now = datetime.now()
+    # Assegnazione della stringa dell'orario corrente (calcolata grazie alla funzione datetime.now()) a orario_scelto
     orario_scelto = now.strftime("%H%M")
+# Altrimenti se la scelta è 2
 elif scelta == 2:
-    orario_scelto = input("Inserire l'orario di partenza desiderato (formato di es: 730 oppure 7:30): ")
+    # Prendo come input orario_scelto
+    orario_scelto = input("Inserire l'orario di partenza desiderato (formato accettato: 730 oppure 7:30): ")
 
+# Rimuovo eventuali ":"
 orario_scelto = orario_scelto.replace(":", "")
+# Rendo orario_scelto un intero
 orario_scelto = int(orario_scelto)
 
 # Eventuale stampa dell'orario scelto
@@ -60,9 +68,13 @@ orario_scelto = int(orario_scelto)
 print("Scegliere tra:" + "\n" + "1: direzione Università, partenza dal Terminal" + "\n" + "2: direzione Terminal, partenza dall'Università")
 scelta = int(input("Scelta: "))
 
+# Se la scelta è 1
 if scelta == 1:
+    # Assegno alla variabile direzione "università"
     direzione = "università"
+# Altrimenti se la scelta è 2
 elif scelta == 2:
+    # Assegno alla variabile direzione "terminal"
     direzione = "terminal"
 
 
@@ -74,28 +86,32 @@ numero_di_orari_da_visualizzare = 3
 
 
 
-### Calcolo degli orari e stampa ###
+### Calcolo elenco degli orari e stampa ###
 for autobus in tutti_gli_autobus:
+        # Inizializzazione variabili
         risultato = ""
         contatore_orari_inseriti = 0
-
+        # Per ogni orario nella tupla di autobus con la direzione scelta
         for orario in tutti_gli_autobus[autobus][direzione]:
             if orario >= orario_scelto and contatore_orari_inseriti < numero_di_orari_da_visualizzare:
-
+                # Rendo orario una stringa e calcolo l'indice centrale di tale stringa
                 orario = str(orario)
                 posizione_due_punti = len(orario) // 2
-
+                # Se il contatore è 0 non aggiunga una virgola iniziale al risultato
                 if contatore_orari_inseriti == 0:
                     orario = orario[0:posizione_due_punti] + ":" + orario[posizione_due_punti:]
+                # Altrimenti la aggiungo
                 else:
                     orario = ", " + orario[0:posizione_due_punti] + ":" + orario[posizione_due_punti:]
-
+                # Update variabili
                 risultato += orario
                 contatore_orari_inseriti += 1
-
+        # Se il risultato è rimasto invariato, ossia non ci sono orari che soddisfano la richiesta
         if risultato == "":
+            # Stampo che non ci sono orari disponibili
             risultato = "non ci sono orari disponibili"
             print("Orari", autobus, risultato)
+        # Altrimenti stampo il risultato ottenuto
         else:
             print("Orari", autobus, risultato)
 
