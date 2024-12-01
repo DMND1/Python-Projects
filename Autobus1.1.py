@@ -101,6 +101,8 @@ if scelta != "tutti":
             lista_autobus_da_mostrare.append(scelta[contatore:i])
             # Update variabili
             contatore = i + 1
+else:
+    lista_autobus_da_mostrare = ["1", "2U/2UT", "3", "4", "6D/6S", "15", "19"]
 
 
 
