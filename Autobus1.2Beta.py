@@ -35,24 +35,51 @@ tutti_gli_autobus =  {
     "19":     autobus_19
 }
 
+# Dizionario della stimata durata del tragitto
+durata_tragitto =  {
+    "1":      30, 
+    "2U/2UT": 25, 
+    "3":      35, 
+    "4":      35, 
+    "6D/6S":  25, 
+    "15":     25, 
+    "19":     35
+}
 
 
-### Prima scelta: orario partenza (alla fermata) ###
-print("Scegliere tra:" + "\n" + "1: per usare l'orario corrente" + "\n" + "2: per inserire l'orario di partenza desiderato")
+
+### Prima scelta: inserire l'orario desiderto di partenza oppure quello di arrivo ###
+print("Scegliere tra:" + "\n" + "1: per scegliere l'orario di partenza desiderato" + "\n" + "2: per scegliere l'orario di arrivo desiderato")
 scelta = int(input("Scelta: "))
 
-# Se la scelta è 1
+orario_di_partenza = False
+orario_di_arrivo = False
+
 if scelta == 1:
-    # Importo la libreria datetime
-    from datetime import datetime
-    # Inizializzazione variabili
-    now = datetime.now()
-    # Assegnazione della stringa dell'orario corrente (calcolata grazie alla funzione datetime.now()) a orario_scelto
-    orario_scelto = now.strftime("%H%M")
-# Altrimenti se la scelta è 2
+    orario_di_partenza = True
 elif scelta == 2:
-    # Prendo come input orario_scelto
-    orario_scelto = input("Inserire l'orario di partenza desiderato (formato accettato: 730 oppure 7:30): ")
+    orario_di_arrivo = True
+
+if orario_di_partenza:
+    ### Eventuale seconda scelta: orario partenza (alla fermata) ###
+    print("Scegliere tra:" + "\n" + "1: per usare l'orario corrente" + "\n" + "2: per inserire l'orario di partenza desiderato")
+    scelta = int(input("Scelta: "))
+
+    # Se la scelta è 1
+    if scelta == 1:
+        # Importo la libreria datetime
+        from datetime import datetime
+        # Inizializzazione variabili
+        now = datetime.now()
+        # Assegnazione della stringa dell'orario corrente (calcolata grazie alla funzione datetime.now()) a orario_scelto
+        orario_scelto = now.strftime("%H%M")
+    # Altrimenti se la scelta è 2
+    elif scelta == 2:
+        # Prendo come input orario_scelto
+        orario_scelto = input("Inserire l'orario di partenza desiderato (formato accettato: 730 oppure 7:30): ")
+
+elif orario_di_arrivo:
+    orario_scelto = input("Inserire l'orario di arrivo desiderato (formato accettato: 730 oppure 7:30): ")
 
 # Rimuovo eventuali ":"
 orario_scelto = orario_scelto.replace(":", "")
@@ -64,7 +91,7 @@ orario_scelto = int(orario_scelto)
 
 
 
-### Seconda scelta: direzione ###
+### Terza scelta: direzione ###
 print("Scegliere tra:" + "\n" + "1: direzione Università, partenza dal Terminal" + "\n" + "2: direzione Terminal, partenza dall'Università")
 scelta = int(input("Scelta: "))
 
@@ -79,7 +106,7 @@ elif scelta == 2:
 
 
 
-### Terza scelta: quali autobus mostrare ###
+### Quarta scelta: quali autobus mostrare ###
 print("Scegliere quali autobus mostrare tra: 1, 2U/2UT, 3, 4, 6D/6S, 15, 19")
 scelta = input("Inserire i nomi degli autobus (formato accettato: 1, 2U/2UT), scrivere 'tutti' altrimenti: ")
 
@@ -136,7 +163,7 @@ def stampaOrari(risultato, autobus):
         print("Orari autobus", autobus + ":", risultato)
     # Altrimenti stampo il risultato ottenuto
     elif risultato != "Ciao ;)":
-        print("Orari autobus", autobus + ":", risultato)
+        print("Orari autobus", autobus + ":", risultato, "- durata del tragitto:", durata_tragitto[autobus], "minuti")
         # Altrimenti se il risultato == "Ciao ;)":
         # Vuol dire che non devo mostrare gli orari di questo autobus, quindi non stampo nulla
 
@@ -153,17 +180,23 @@ for autobus in tutti_gli_autobus:
         contatore_orari_inseriti = 0
         # Per ogni orario nella tupla di autobus con la direzione scelta
         for orario in tutti_gli_autobus[autobus][direzione]:
+            # Se è stato scelto l'orario di partenza
             # Se l'orario è più grande dell'orario scelto e se il contatore non ha superato il numero di orari da visualizzare
-            if orario >= orario_scelto and contatore_orari_inseriti < numero_di_orari_da_visualizzare:
+            if orario_di_partenza and orario >= orario_scelto and contatore_orari_inseriti < numero_di_orari_da_visualizzare:
                 # Update variabili
                 orario = cambioOrario(orario, contatore_orari_inseriti)
                 risultato += orario
                 contatore_orari_inseriti += 1
+            # Altrimenti se è stato scelto l'orario di arrivo
+            elif orario_di_arrivo and ... and contatore_orari_inseriti < numero_di_orari_da_visualizzare:
+# Da finire ...
+                risultato = ""
+# Da finire ...
     # Stampo il risultato
     stampaOrari(risultato, autobus)
 
 
 
 # Idee ancora da implementare: 
-# - Aggiungere l'opzione per scegliere se inserire l'orario desiderto di partenza oppure quello di arrivo
+# ~ Aggiungere l'opzione per scegliere se inserire l'orario desiderto di partenza oppure quello di arrivo
 # - Aggiungere la possibilità di scegliere la stazione di partenza e quella di arrivo (con annesso calcolo della direzione)
