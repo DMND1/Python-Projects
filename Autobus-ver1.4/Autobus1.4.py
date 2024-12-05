@@ -200,5 +200,4 @@ while run != "stop":
 
 
 # Idee ancora da implementare:
-# - Mettere i dati dentro un file e leggerli da quel file
 # - Aggiungere la possibilità di scegliere la stazione di partenza e quella di arrivo (con annesso calcolo della direzione)
