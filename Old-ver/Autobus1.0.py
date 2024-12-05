@@ -1,3 +1,10 @@
+### Updates ###
+# ver: 1.0:
+# - Aggiunta dei dati
+# - Aggiunta della formattazione della stampa
+
+
+
 ### Dati ###
 # Tuple degli orari
 orari_autobus_1_direzione_terminal =        (712,  722,  747,  822,  842,  905,  945,  1025, 1105, 1145, 1225, 1305, 1345, 1402, 1425, 1505, 1545, 1625, 1705, 1745, 1825, 1905, 1945, 2025, 2120)
@@ -26,13 +33,13 @@ autobus_19 =     {"terminal": orari_autobus_19_direzione_terminal,     "universi
 
 # Dizionario dei dizionari degli autobus con relativo nome già formattato per la stampa
 tutti_gli_autobus =  {
-    "1":      autobus_1, 
-    "2U/2UT": autobus_2U_2UT, 
-    "3":      autobus_3, 
-    "4":      autobus_4, 
-    "6D/6S":  autobus_6D_6S, 
-    "15":     autobus_15, 
-    "19":     autobus_19
+    "autobus 1:      ": autobus_1, 
+    "autobus 2U/2UT: ": autobus_2U_2UT, 
+    "autobus 4:      ": autobus_4, 
+    "autobus 6D/6S:  ": autobus_6D_6S, 
+    "autobus 3:      ": autobus_3, 
+    "autobus 15:     ": autobus_15, 
+    "autobus 19:     ": autobus_19
 }
 
 
@@ -79,33 +86,6 @@ elif scelta == 2:
 
 
 
-### Terza scelta: quali autobus mostrare ###
-print("Scegliere quali autobus mostrare tra: 1, 2U/2UT, 3, 4, 6D/6S, 15, 19")
-scelta = input("Inserire i nomi degli autobus (formato accettato: 1, 2U/2UT), scrivere 'tutti' altrimenti: ")
-
-# Se la scelta non è tutti
-if scelta != "tutti":
-    # Rimuovo le virgole
-    scelta = scelta.replace(",", "")
-    # Aggiungo uno spazio alla fine
-    scelta += " "
-    # Inizializzazione variabili
-    lista_autobus_da_mostrare = []
-    contatore = 0
-
-    # Per ogni i (indice) da 1 a len(scelta)
-    for i in range(1, len(scelta)):
-        # Se il carattere di tale indice i è uguale a " "
-        if scelta[i] == " ":
-            # Aggiungo alla lista degli autobus da mostrare i caratteri che vanno da contatore a i (escluso)
-            lista_autobus_da_mostrare.append(scelta[contatore:i])
-            # Update variabili
-            contatore = i + 1
-else:
-    lista_autobus_da_mostrare = ["1", "2U/2UT", "3", "4", "6D/6S", "15", "19"]
-
-
-
 ### Eventuale scelta: numero di orari da visualizzare ###
 # scelta = int(input("Inserire il numero di orari da visualizzare: "))
 # numero_di_orari_da_visualizzare = scelta
@@ -113,57 +93,38 @@ numero_di_orari_da_visualizzare = 3
 
 
 
-### Funzioni ###
-def cambioOrario(orario, contatore_orari_inseriti):
-    # Rendo orario una stringa e calcolo l'indice centrale di tale stringa
-    orario = str(orario)
-    posizione_due_punti = len(orario) // 2
-    # Se il contatore è 0 non aggiunga una virgola iniziale al risultato
-    if contatore_orari_inseriti == 0:
-        orario = orario[0:posizione_due_punti] + ":" + orario[posizione_due_punti:]
-    # Altrimenti la aggiungo
-    else:
-        orario = ", " + orario[0:posizione_due_punti] + ":" + orario[posizione_due_punti:]
-
-    return orario
-
-# Procedura in questo caso
-def stampaOrari(risultato, autobus):
-    # Se il risultato è rimasto invariato, ossia non ci sono orari che soddisfano la richiesta
-    if risultato == "":
-        # Stampo che non ci sono orari disponibili
-        risultato = "non ci sono orari disponibili"
-        print("Orari autobus", autobus + ":", risultato)
-    # Altrimenti stampo il risultato ottenuto
-    elif risultato != "Ciao ;)":
-        print("Orari autobus", autobus + ":", risultato)
-        # Altrimenti se il risultato == "Ciao ;)":
-        # Vuol dire che non devo mostrare gli orari di questo autobus, quindi non stampo nulla
-
-
-
 ### Calcolo elenco degli orari e stampa ###
 for autobus in tutti_gli_autobus:
-    # Inizializzazione variabili
-    risultato = "Ciao ;)"
-    # Se autobus si trova anche nella lista di autobus da mostrare
-    if autobus in lista_autobus_da_mostrare:
         # Inizializzazione variabili
         risultato = ""
         contatore_orari_inseriti = 0
         # Per ogni orario nella tupla di autobus con la direzione scelta
         for orario in tutti_gli_autobus[autobus][direzione]:
-            # Se l'orario è più grande dell'orario scelto e se il contatore non ha superato il numero di orari da visualizzare
             if orario >= orario_scelto and contatore_orari_inseriti < numero_di_orari_da_visualizzare:
+                # Rendo orario una stringa e calcolo l'indice centrale di tale stringa
+                orario = str(orario)
+                posizione_due_punti = len(orario) // 2
+                # Se il contatore è 0 non aggiunga una virgola iniziale al risultato
+                if contatore_orari_inseriti == 0:
+                    orario = orario[0:posizione_due_punti] + ":" + orario[posizione_due_punti:]
+                # Altrimenti la aggiungo
+                else:
+                    orario = ", " + orario[0:posizione_due_punti] + ":" + orario[posizione_due_punti:]
                 # Update variabili
-                orario = cambioOrario(orario, contatore_orari_inseriti)
                 risultato += orario
                 contatore_orari_inseriti += 1
-    # Stampo il risultato
-    stampaOrari(risultato, autobus)
+        # Se il risultato è rimasto invariato, ossia non ci sono orari che soddisfano la richiesta
+        if risultato == "":
+            # Stampo che non ci sono orari disponibili
+            risultato = "non ci sono orari disponibili"
+            print("Orari", autobus, risultato)
+        # Altrimenti stampo il risultato ottenuto
+        else:
+            print("Orari", autobus, risultato)
 
 
 
 # Idee ancora da implementare: 
+# - Aggiungere la scelta di quali autobus mostrare gli orari
 # - Aggiungere l'opzione per scegliere se inserire l'orario desiderto di partenza oppure quello di arrivo
 # - Aggiungere la possibilità di scegliere la stazione di partenza e quella di arrivo (con annesso calcolo della direzione)

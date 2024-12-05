@@ -1,3 +1,9 @@
+### Updates ###
+# ver: 1.3:
+# - Aggiunta dell'opzione per scegliere se inserire l'orario di partenza oppure quello di arrivo
+
+
+
 ### Dati ###
 # Tuple degli orari
 orari_autobus_1_direzione_terminal =        (712,  722,  747,  822,  842,  905,  945,  1025, 1105, 1145, 1225, 1305, 1345, 1402, 1425, 1505, 1545, 1625, 1705, 1745, 1825, 1905, 1945, 2025, 2120)
@@ -49,49 +55,45 @@ durata_tragitto =  {
 
 
 ### Funzioni ###
-def cambioOrario(orario, contatore_orari_inseriti):
-    # Rendo orario una stringa e calcolo l'indice centrale di tale stringa
-    orario = str(orario)
-    posizione_due_punti = len(orario) // 2
-    # Se il contatore è 0 non aggiunga una virgola iniziale al risultato
-    if contatore_orari_inseriti == 0:
-        orario = orario[0:posizione_due_punti] + ":" + orario[posizione_due_punti:]
-    # Altrimenti la aggiungo
+def calcoloOrarioMassimo(orario_di_arrivo, autobus, durata_tragitto):
+
+    ore = orario_di_arrivo // 100
+    minuti = orario_di_arrivo % 100
+
+    if minuti > durata_tragitto[autobus]:
+        orario_di_arrivo_finale = ore * 100 + minuti - durata_tragitto[autobus]
     else:
-        orario = ", " + orario[0:posizione_due_punti] + ":" + orario[posizione_due_punti:]
+        minuti_totali = minuti + ore * 60
+        minuti_totali = minuti_totali - durata_tragitto[autobus]
 
-    return orario
+        ore = minuti_totali // 60
+        minuti = minuti_totali % 60
 
-def orarioInMinuti(orario):
-    orario = str(orario)
-    posizione_centro = len(orario) // 2
+        orario_di_arrivo_finale = ore * 100 + minuti
 
-    minuti = int(orario[posizione_centro:])
+    return orario_di_arrivo_finale
 
-    return minuti
+def calcoloRisultato(lista_orari_da_stampare):
+    risultato = ""
+    contatore_orari_inseriti = 0
 
-def calcoloOrarioMassimo(orario, durata_tragitto):
+    if len(lista_autobus_da_mostrare) > 3:
+        estremo = max(len(lista_orari_da_stampare), 3) - 3
+        lista_orari_da_stampare = lista_orari_da_stampare[estremo:len(lista_orari_da_stampare)]
 
-    ore = orario // 100
-    minuti = orarioInMinuti(orario)
+    for orario in lista_orari_da_stampare:
+        # Rendo orario una stringa e calcolo l'indice centrale di tale stringa
+        orario = str(orario)
+        posizione_due_punti = len(orario) // 2
+        # Se il contatore è 0 non aggiunga una virgola iniziale al risultato
+        if contatore_orari_inseriti == 0:
+            risultato += orario[0:posizione_due_punti] + ":" + orario[posizione_due_punti:]
+        # Altrimenti la aggiungo
+        else:
+            risultato += ", " + orario[0:posizione_due_punti] + ":" + orario[posizione_due_punti:]
+        contatore_orari_inseriti += 1
     
-    print(ore, minuti)
-
-    if minuti > durata_tragitto:
-        return ore ** 100 + minuti - durata_tragitto
-    
-    minuti_totali = minuti + ore * 60
-
-    minuti_finali = minuti_totali - durata_tragitto
-    
-    ore = 0
-
-    return None
-
-    # converti l'orario in minuti
-    # sottrati la durata del tragitto
-    # ritorna il risultato
-
+    return risultato
 
 # Procedura in questo caso
 def stampaOrari(risultato, autobus):
@@ -160,7 +162,6 @@ while run != "stop":
     ### Terza scelta: direzione ###
     print("\n" + "Scegliere tra: 1, 2" + "\n" + "1: direzione Università, partenza dal Terminal" + "\n" + "2: direzione Terminal, partenza dall'Università")
     scelta = int(input("Scelta: "))
-    print()
 
     # Se la scelta è 1
     if scelta == 1:
@@ -212,26 +213,24 @@ while run != "stop":
     ### Calcolo elenco degli orari e stampa ###
     for autobus in tutti_gli_autobus:
         # Inizializzazione variabili
+        orario_da_non_superare = calcoloOrarioMassimo(orario_scelto, autobus, durata_tragitto)
         risultato = "Ciao ;)"
         # Se autobus si trova anche nella lista di autobus da mostrare
         if autobus in lista_autobus_da_mostrare:
             # Inizializzazione variabili
-            risultato = ""
-            contatore_orari_inseriti = 0
+            lista_orari_da_stampare = []
             # Per ogni orario nella tupla di autobus con la direzione scelta
             for orario in tutti_gli_autobus[autobus][direzione]:
-                # Se è stato scelto l'orario di partenza
                 # Se l'orario è più grande dell'orario scelto e se il contatore non ha superato il numero di orari da visualizzare
-                if orario_di_partenza and orario >= orario_scelto and contatore_orari_inseriti < numero_di_orari_da_visualizzare:
+                if orario_di_partenza and orario >= orario_scelto and len(lista_orari_da_stampare) < numero_di_orari_da_visualizzare:
                     # Update variabili
-                    orario = cambioOrario(orario, contatore_orari_inseriti)
-                    risultato += orario
-                    contatore_orari_inseriti += 1
+                    lista_orari_da_stampare.append(orario)
                 # Altrimenti se è stato scelto l'orario di arrivo
-                elif orario_di_arrivo and ... and contatore_orari_inseriti < numero_di_orari_da_visualizzare:
-    # Da finire ...
-                    risultato = ""
-    # Da finire ...
+                elif orario_di_arrivo and orario <= orario_da_non_superare:
+                    # Update variabili
+                    lista_orari_da_stampare.append(orario)
+            # Calcolo risultato
+            risultato = calcoloRisultato(lista_orari_da_stampare)
         # Stampo il risultato
         stampaOrari(risultato, autobus)
 
@@ -242,6 +241,6 @@ while run != "stop":
     print()
 
 
-# Idee ancora da implementare: 
-# ~ Aggiungere l'opzione per scegliere se inserire l'orario desiderto di partenza oppure quello di arrivo
+# Idee ancora da implementare:
+# - Mettere i dati dentro un file e leggerli da quel file
 # - Aggiungere la possibilità di scegliere la stazione di partenza e quella di arrivo (con annesso calcolo della direzione)

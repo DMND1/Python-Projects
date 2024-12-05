@@ -1,3 +1,9 @@
+### Updates ###
+# ver: 1.2:
+# - Aggiunta della possibilità di continuare a eseguire il programma senza riavviarlo
+
+
+
 ### Dati ###
 # Tuple degli orari
 orari_autobus_1_direzione_terminal =        (712,  722,  747,  822,  842,  905,  945,  1025, 1105, 1145, 1225, 1305, 1345, 1402, 1425, 1505, 1545, 1625, 1705, 1745, 1825, 1905, 1945, 2025, 2120)
@@ -178,4 +184,5 @@ while run != "stop":
 
 # Idee ancora da implementare: 
 # - Aggiungere l'opzione per scegliere se inserire l'orario desiderto di partenza oppure quello di arrivo
+# - Mettere i dati dentro un file e leggerli da quel file
 # - Aggiungere la possibilità di scegliere la stazione di partenza e quella di arrivo (con annesso calcolo della direzione)
