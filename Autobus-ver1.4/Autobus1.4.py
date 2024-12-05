@@ -1,14 +1,14 @@
 ### Updates ###
-# ver: 1.3:
-# - Aggiunta dell'opzione per scegliere se inserire l'orario di partenza oppure quello di arrivo
+# ver: 1.4:
+# - Messi i dati dentro un file json
 
 
 
 ### Dati ###
-import json
+from json import load
 
 with open('Autobus-ver1.4/data.json', 'r') as file:
-    data = json.load(file)
+    data = load(file)
 
 
 
