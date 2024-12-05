@@ -62,6 +62,37 @@ def cambioOrario(orario, contatore_orari_inseriti):
 
     return orario
 
+def orarioInMinuti(orario):
+    orario = str(orario)
+    posizione_centro = len(orario) // 2
+
+    minuti = int(orario[posizione_centro:])
+
+    return minuti
+
+def calcoloOrarioMassimo(orario, durata_tragitto):
+
+    ore = orario // 100
+    minuti = orarioInMinuti(orario)
+    
+    print(ore, minuti)
+
+    if minuti > durata_tragitto:
+        return ore ** 100 + minuti - durata_tragitto
+    
+    minuti_totali = minuti + ore * 60
+
+    minuti_finali = minuti_totali - durata_tragitto
+    
+    ore = 0
+
+    return None
+
+    # converti l'orario in minuti
+    # sottrati la durata del tragitto
+    # ritorna il risultato
+
+
 # Procedura in questo caso
 def stampaOrari(risultato, autobus):
     # Se il risultato è rimasto invariato, ossia non ci sono orari che soddisfano la richiesta
