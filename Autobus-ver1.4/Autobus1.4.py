@@ -31,13 +31,17 @@ def calcoloOrarioMassimo(orario_di_arrivo, autobus):
 
     return orario_di_arrivo_finale
 
-def calcoloRisultato(lista_orari_da_stampare):
+# Procedura in questo caso
+def calcoloRisultatoEStampa(lista_orari_da_stampare, autobus, bool):
     risultato = ""
     contatore_orari_inseriti = 0
 
-    if len(lista_autobus_da_mostrare) > 3:
+    if len(lista_autobus_da_mostrare) > 3 and bool:
         estremo = max(len(lista_orari_da_stampare), 3) - 3
         lista_orari_da_stampare = lista_orari_da_stampare[estremo:len(lista_orari_da_stampare)]
+    elif len(lista_autobus_da_mostrare) > 3 and not bool:
+        estremo = min(len(lista_autobus_da_mostrare), 3)
+        lista_orari_da_stampare = lista_orari_da_stampare[:estremo]
 
     for orario in lista_orari_da_stampare:
         # Rendo orario una stringa e calcolo l'indice centrale di tale stringa
@@ -51,10 +55,6 @@ def calcoloRisultato(lista_orari_da_stampare):
             risultato += ", " + orario[0:posizione_due_punti] + ":" + orario[posizione_due_punti:]
         contatore_orari_inseriti += 1
     
-    return risultato
-
-# Procedura in questo caso
-def stampaOrari(risultato, autobus):
     # Se il risultato è rimasto invariato, ossia non ci sono orari che soddisfano la richiesta
     if risultato == "":
         # Stampo che non ci sono orari disponibili
@@ -172,7 +172,6 @@ while run != "stop":
     for autobus in data["tutti_gli_autobus"]:
         # Inizializzazione variabili
         orario_da_non_superare = calcoloOrarioMassimo(orario_scelto, autobus)
-        risultato = "Ciao ;)"
         # Se autobus si trova anche nella lista di autobus da mostrare
         if autobus in lista_autobus_da_mostrare:
             # Inizializzazione variabili
@@ -180,22 +179,21 @@ while run != "stop":
             # Per ogni orario nella tupla di autobus con la direzione scelta
             for orario in data["tutti_gli_autobus"][autobus][direzione]:
                 # Se l'orario è più grande dell'orario scelto e se il contatore non ha superato il numero di orari da visualizzare
-                if orario_di_partenza and orario >= orario_scelto and len(lista_orari_da_stampare) < numero_di_orari_da_visualizzare:
+                if orario_di_partenza and orario >= orario_scelto:
                     # Update variabili
                     lista_orari_da_stampare.append(orario)
                 # Altrimenti se è stato scelto l'orario di arrivo
                 elif orario_di_arrivo and orario <= orario_da_non_superare:
                     # Update variabili
                     lista_orari_da_stampare.append(orario)
-            # Calcolo risultato
-            risultato = calcoloRisultato(lista_orari_da_stampare)
-        # Stampo il risultato
-        stampaOrari(risultato, autobus)
+        # Calcolo e stampo il risultato
+        calcoloRisultatoEStampa(lista_orari_da_stampare, autobus, orario_di_arrivo)
 
     print()
     run = input("Scrivere 'stop' per fermare il programma, altrimenti inserire qualsiasi carettere per continuare: ")
     run = run.lower()
     run = run.replace("'", "")
+    run = run.replace(" ", "")
     print()
 
 
