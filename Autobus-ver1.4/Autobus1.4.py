@@ -14,36 +14,42 @@ with open('Autobus-ver1.4/data.json', 'r') as file:
 
 ### Funzioni ###
 def calcoloOrarioMassimo(orario_di_arrivo, autobus):
-
+    # Conversione di orario di arrivo in ore e minuti
     ore = orario_di_arrivo // 100
     minuti = orario_di_arrivo % 100
-
+    # Se i minuti sono maggiori della durata del tragitto
     if minuti > data["durata_tragitto"][autobus]:
+        # Non è necessario fare il calcolo che segue l'else e quindi ritorno questo:
         orario_di_arrivo_finale = ore * 100 + minuti - data["durata_tragitto"][autobus]
+    # Altrimneti
     else:
+        # Calcolo delle nuove variabili
         minuti_totali = minuti + ore * 60
         minuti_totali = minuti_totali - data["durata_tragitto"][autobus]
-
         ore = minuti_totali // 60
         minuti = minuti_totali % 60
-
         orario_di_arrivo_finale = ore * 100 + minuti
 
     return orario_di_arrivo_finale
 
 # Procedura in questo caso
-def calcoloRisultatoEStampa(lista_orari_da_stampare, autobus, bool):
+def calcoloRisultatoEStampa(lista_orari, autobus, bool):
+    # Inizializzazione variabili
     risultato = ""
     contatore_orari_inseriti = 0
-
-    if len(lista_autobus_da_mostrare) > 3 and bool:
-        estremo = max(len(lista_orari_da_stampare), 3) - 3
-        lista_orari_da_stampare = lista_orari_da_stampare[estremo:len(lista_orari_da_stampare)]
-    elif len(lista_autobus_da_mostrare) > 3 and not bool:
-        estremo = min(len(lista_autobus_da_mostrare), 3)
-        lista_orari_da_stampare = lista_orari_da_stampare[:estremo]
-
-    for orario in lista_orari_da_stampare:
+    # Controllo se la lista ha più di 3 elementi
+    # Se la lista ha più di tre elementi e la variabile bool (orario_di_arrivo) è vera
+    if len(lista_orari) > 3 and bool:
+        # Faccio in modo che la lista abbia solo gli ultimi 3 elementi 
+        # (orario_di_arrivo: devo mostrare gli orari più vicini a tale orario - durata_tragitto)
+        estremo = max(len(lista_orari), 3) - 3
+        lista_orari = lista_orari[estremo:len(lista_orari)]
+    # Altrimenti se la lista ha più di tre elementi e la variabile bool (orario_di_arrivo) è falsa
+    elif len(lista_orari) > 3 and not bool:
+        # Faccio in modo che la lista abbia solo i primi 3 elementi
+        estremo = min(len(lista_orari), 3)
+        lista_orari = lista_orari[:estremo]
+    for orario in lista_orari:
         # Rendo orario una stringa e calcolo l'indice centrale di tale stringa
         orario = str(orario)
         posizione_due_punti = len(orario) // 2
@@ -53,6 +59,7 @@ def calcoloRisultatoEStampa(lista_orari_da_stampare, autobus, bool):
         # Altrimenti la aggiungo
         else:
             risultato += ", " + orario[0:posizione_due_punti] + ":" + orario[posizione_due_punti:]
+        # Update variabili
         contatore_orari_inseriti += 1
     
     # Se il risultato è rimasto invariato, ossia non ci sono orari che soddisfano la richiesta
@@ -61,10 +68,10 @@ def calcoloRisultatoEStampa(lista_orari_da_stampare, autobus, bool):
         risultato = "non ci sono orari disponibili"
         print("Orari autobus", autobus + ":", risultato)
     # Altrimenti stampo il risultato ottenuto
-    elif risultato != "Ciao ;)":
+    else:
         print("Orari autobus", autobus + ":", risultato, "- durata del tragitto:", data["durata_tragitto"][autobus], "minuti")
         # Altrimenti se il risultato == "Ciao ;)":
-        # Vuol dire che non devo mostrare gli orari di questo autobus, quindi non stampo nulla
+        # Vuol dire che non devo mostrare gli orari di questo autobus, quindi non stampo nulla 
 
 
 
@@ -78,9 +85,10 @@ while run != "stop":
 
     orario_di_partenza = False
     orario_di_arrivo = False
-
+    # Se la scelta è 1
     if scelta == 1:
         orario_di_partenza = True
+    # Altrimenti se la scelta è 2
     elif scelta == 2:
         orario_di_arrivo = True
 
@@ -186,8 +194,8 @@ while run != "stop":
                 elif orario_di_arrivo and orario <= orario_da_non_superare:
                     # Update variabili
                     lista_orari_da_stampare.append(orario)
-        # Calcolo e stampo il risultato
-        calcoloRisultatoEStampa(lista_orari_da_stampare, autobus, orario_di_arrivo)
+            # Calcolo e stampo il risultato
+            calcoloRisultatoEStampa(lista_orari_da_stampare, autobus, orario_di_arrivo)
 
     print()
     run = input("Scrivere 'stop' per fermare il programma, altrimenti inserire qualsiasi carettere per continuare: ")
