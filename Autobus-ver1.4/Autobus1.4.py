@@ -196,6 +196,9 @@ while run != "stop":
     run = run.replace(" ", "")
     print()
 
+file.close()
+
+
 
 # Idee ancora da implementare:
 # - Aggiungere la possibilità di scegliere la stazione di partenza e quella di arrivo (con annesso calcolo della direzione)
